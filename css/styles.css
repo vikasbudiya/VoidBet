@@ -398,10 +398,15 @@ a {
     width: 38px;
     height: 38px;
 }
-.hex-logo-svg {
+.brand-logo-img {
     width: 100%;
     height: 100%;
-    animation: rotateHexLogo 15s linear infinite;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px var(--neon-purple-glow));
+    transition: transform var(--transition-fast);
+}
+.logo-link:hover .brand-logo-img {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .logo-brand {
