@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoidBet | Premium Casino & Sportsbook</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for interface icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme">
+
+    <!-- Loading Overlay -->
+    <div id="globalLoader" class="loader-overlay glass-blur">
+        <div class="loader-content">
+            <div class="cyber-logo-glitch" data-text="VoidBet">VoidBet</div>
+            <div class="matrix-bar">
+                <div class="matrix-progress" id="loaderProgressBar"></div>
+            </div>
+            <div class="loader-text pulse-text">Preparing your secure lobby... <span id="loaderPercent">0%</span></div>
+        </div>
+    </div>
+
+    <!-- Cursor ambient lighting layer is driven by CSS variables in app.js -->
+    <div class="glow-orb glow-orb-cyan"></div>
+    <div class="glow-orb glow-orb-purple"></div>
+    <div class="glow-orb glow-orb-green"></div>
+    <canvas id="ambientParticles"></canvas>
+
+    <!-- Global Layout Wrapper -->
+    <div class="app-layout">
+        
+        <!-- HEADER -->
+        <header class="main-header glass-blur">
+            <div class="header-left">
+                <!-- Collapsible Sidebar Trigger -->
+                <button class="icon-btn header-toggle" id="sidebarCollapseBtn" title="Toggle Nav">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+                <a href="#home" class="logo-link">
+                    <div class="logo-icon-wrapper">
+                        <!-- Matte geometric brand mark -->
+                        <svg class="hex-logo-svg" viewBox="0 0 100 100">
+                            <defs>
+                                <linearGradient id="cyberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#c99a4e" />
+                                    <stop offset="50%" stop-color="#d9b36a" />
+                                    <stop offset="100%" stop-color="#8b958f" />
+                                </linearGradient>
+                                <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feMerge>
+                                        <feMergeNode in="blur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <!-- Concentric spinning hexagons -->
+                            <polygon points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5" fill="none" stroke="url(#cyberGlow)" stroke-width="3" filter="url(#glowFilter)"/>
+                            <polygon points="50,25 72,37.5 72,62.5 50,75 28,62.5 28,37.5" fill="none" stroke="url(#cyberGlow)" stroke-width="1.5" opacity="0.7"/>
+                            <circle cx="50" cy="50" r="8" fill="url(#cyberGlow)" filter="url(#glowFilter)" class="pulse-core"/>
+                        </svg>
+                    </div>
+                    <span class="logo-brand">Void<span class="neon-color-text">Bet</span></span>
+                </a>
+            </div>
+
+            <!-- Header Balance and Controls -->
+            <div class="header-right">
+                <!-- Real-time Live Price Ticker -->
+                <div class="price-ticker-wrapper hidden-mobile">
+                    <div class="ticker-item"><i class="fa-brands fa-ethereum eth-color"></i> <span id="tickerEthPrice">$3,420.50</span></div>
+                    <div class="ticker-item"><i class="fa-solid fa-sun sol-color"></i> <span id="tickerSolPrice">$148.20</span></div>
+                </div>
+
+                <!-- Interactive Crypto Balance Dropdown -->
+                <div class="wallet-balance-box">
+                    <div class="balance-display" id="balanceDisplayBtn">
+                        <span id="activeWalletIcon"><i class="fa-brands fa-ethereum eth-color"></i></span>
+                        <span class="balance-numbers" id="headerBalanceValue">12.45000</span>
+                        <span class="balance-unit" id="headerBalanceUnit">ETH</span>
+                        <i class="fa-solid fa-chevron-down caret-icon"></i>
+                    </div>
+                    
+                    <!-- Wallet selector dropdown -->
+                    <div class="balance-dropdown glass-panel" id="balanceDropdownPanel">
+                        <div class="dropdown-header">Select Active Currency</div>
+                        <div class="dropdown-list">
+                            <div class="crypto-select-row active" data-currency="ETH">
+                                <span class="row-icon"><i class="fa-brands fa-ethereum eth-color"></i></span>
+                                <span class="row-name">Ethereum</span>
+                                <span class="row-val" id="dropValETH">12.45000 ETH</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="SOL">
+                                <span class="row-icon"><i class="fa-solid fa-sun sol-color"></i></span>
+                                <span class="row-name">Solana</span>
+                                <span class="row-val" id="dropValSOL">245.8200 SOL</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="BTC">
+                                <span class="row-icon"><i class="fa-brands fa-bitcoin btc-color"></i></span>
+                                <span class="row-name">Bitcoin</span>
+                                <span class="row-val" id="dropValBTC">0.34500 BTC</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="USDT">
+                                <span class="row-icon"><i class="fa-solid fa-dollar-sign usdt-color"></i></span>
+                                <span class="row-name">USDT</span>
+                                <span class="row-val" id="dropValUSDT">15,420.00 USDT</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="BNB">
+                                <span class="row-icon"><i class="fa-solid fa-cube eth-color"></i></span>
+                                <span class="row-name">BNB</span>
+                                <span class="row-val" id="dropValBNB">8.42000 BNB</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="DOGE">
+                                <span class="row-icon"><i class="fa-solid fa-dog usdt-color"></i></span>
+                                <span class="row-name">DOGE</span>
+                                <span class="row-val" id="dropValDOGE">14,250.00 DOGE</span>
+                            </div>
+                            <div class="crypto-select-row" data-currency="XRP">
+                                <span class="row-icon"><i class="fa-solid fa-wave-square eth-color"></i></span>
+                                <span class="row-name">XRP</span>
+                                <span class="row-val" id="dropValXRP">3,840.00 XRP</span>
+                            </div>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="btn btn-primary btn-sm btn-full" id="headerWalletOpenBtn"><i class="fa-solid fa-wallet"></i> Manage Wallet</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deposit Quick Launch -->
+                <button class="btn btn-success deposit-btn" id="headerDepositBtn"><i class="fa-solid fa-bolt"></i> Deposit</button>
+
+                <!-- Sound toggler -->
+                <button class="icon-btn header-btn" id="soundToggleBtn" title="Toggle audio">
+                    <i class="fa-solid fa-volume-xmark sound-off"></i>
+                    <i class="fa-solid fa-volume-high sound-on" style="display:none;"></i>
+                </button>
+
+                <!-- Profile Anchor -->
+                <button class="profile-header-trigger" id="profileHeaderBtn">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=AveryHouse&backgroundColor=12131a" alt="User Profile" class="header-avatar" id="headerProfileAvatar">
+                    <span class="user-level-badge bronze-badge" id="headerLevelBadge">Lv.14</span>
+                </button>
+
+                <!-- Interactive Chat toggle -->
+                <button class="icon-btn header-btn chat-toggle-btn" id="chatDrawerToggleBtn" title="Toggle Community Chat">
+                    <div class="chat-icon-badge-wrap">
+                        <i class="fa-solid fa-comments"></i>
+                        <span class="chat-ping-dot pulse-badge"></span>
+                    </div>
+                </button>
+            </div>
+        </header>
+
+        <!-- APP CONTENT BODY -->
+        <div class="app-body">
+            
+            <!-- LEFT NAVIGATION SIDEBAR -->
+            <aside class="sidebar glass-blur" id="mainSidebar">
+                <nav class="sidebar-nav">
+                    <div class="nav-section-title">Gaming</div>
+                    <a href="#home" class="sidebar-link active" data-view="home"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+                    <a href="#casino" class="sidebar-link" data-view="casino"><i class="fa-solid fa-gamepad"></i> <span>Casino</span></a>
+                    <a href="#sportsbook" class="sidebar-link" data-view="sportsbook"><i class="fa-solid fa-trophy"></i> <span>Sportsbook</span></a>
+                    <a href="#live-casino" class="sidebar-link" data-view="live-casino"><i class="fa-solid fa-video"></i> <span>Live Dealers</span></a>
+                    
+                    <div class="nav-section-title">Community</div>
+                    <a href="#vip" class="sidebar-link" data-view="vip"><i class="fa-solid fa-crown neon-purple-text"></i> <span>VIP Club</span></a>
+                    <a href="#challenges" class="sidebar-link" data-view="challenges"><i class="fa-solid fa-bullseye"></i> <span>Daily Missions</span></a>
+                    <a href="#leaderboards" class="sidebar-link" data-view="leaderboards"><i class="fa-solid fa-chart-bar"></i> <span>Leaderboards</span></a>
+                    <a href="#streamer-hub" class="sidebar-link" data-view="streamer-hub"><i class="fa-solid fa-tower-broadcast"></i> <span>Streamer Hub</span></a>
+                    
+                    <div class="nav-section-title">Trust</div>
+                    <a href="#provably-fair" class="sidebar-link" data-view="provably-fair"><i class="fa-solid fa-shield-halved"></i> <span>Provably Fair</span></a>
+                    <a href="#affiliate" class="sidebar-link" data-view="affiliate"><i class="fa-solid fa-users-rectangle"></i> <span>Affiliates</span></a>
+                    <a href="#promotions" class="sidebar-link" data-view="promotions"><i class="fa-solid fa-tags"></i> <span>Promotions</span></a>
+                    
+                    <div class="nav-section-title">Account</div>
+                    <a href="#profile" class="sidebar-link" data-view="profile"><i class="fa-solid fa-user-gear"></i> <span>My Profile</span></a>
+                    <a href="#wallet" class="sidebar-link" data-view="wallet"><i class="fa-solid fa-wallet"></i> <span>Wallet Hub</span></a>
+                    <a href="#settings" class="sidebar-link" data-view="settings"><i class="fa-solid fa-sliders"></i> <span>Preferences</span></a>
+                    <a href="#help-center" class="sidebar-link" data-view="help-center"><i class="fa-solid fa-circle-question"></i> <span>Help Portal</span></a>
+                </nav>
+                
+                <!-- Quick Stats Footer inside Sidebar -->
+                <div class="sidebar-footer-stats" style="position: relative;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+                        <div class="disney-floating-mascot" style="width: 36px; height: 36px; border-radius: 50%; flex-shrink:0;"></div>
+                        <div style="font-size: 10px; font-weight: 700; color: var(--cyber-cyan); letter-spacing: 0.1em;">ADVISOR ONLINE</div>
+                    </div>
+                    <div class="jackpot-small-label">House Jackpot</div>
+                    <div class="jackpot-small-val" id="sidebarJackpotValue">$2,450,183.42</div>
+                </div>
+            </aside>
+
+            <!-- CENTRAL VIEWPORT AREA -->
+            <main class="main-viewport" id="viewportContainer">
+                <div id="view-viewport" class="viewport-transition">
+                    <!-- Router injects views dynamically here -->
+                </div>
+            </main>
+
+            <!-- RIGHT CHAT & BETS SIDEBAR -->
+            <aside class="chat-sidebar glass-blur" id="chatSidebar">
+                <div class="chat-tabs-header">
+                    <button class="chat-tab-btn active" id="chatTabRoomBtn"><i class="fa-solid fa-comment-dots"></i> Chat Room</button>
+                    <button class="chat-tab-btn" id="chatTabBetsBtn"><i class="fa-solid fa-receipt"></i> Live Bets</button>
+                </div>
+
+                <!-- Chat Room Panel -->
+                <div class="chat-tab-panel active" id="chatRoomPanel">
+                    <div class="clan-chat-banner">
+                        <span class="active-pulse"></span>
+                        <span class="chat-online-count" id="chatOnlineCounter">1,482 players online</span>
+                    </div>
+                    <div class="chat-messages-container" id="chatMessagesBox">
+                        <!-- Loaded Dynamically -->
+                    </div>
+                    <!-- Quick Emote Drawer -->
+                    <div class="chat-emote-row">
+                        <span class="emote-pill" data-emote="🚀">🚀</span>
+                        <span class="emote-pill" data-emote="🔥">🔥</span>
+                        <span class="emote-pill" data-emote="👑">👑</span>
+                        <span class="emote-pill" data-emote="🥶">🥶</span>
+                        <span class="emote-pill" data-emote="🤑">🤑</span>
+                        <span class="emote-pill" data-emote="💎">💎</span>
+                    </div>
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInputText" placeholder="Message the lobby..." maxlength="200">
+                        <button class="chat-send-btn" id="chatSendMsgBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+
+                <!-- Live Bets Panel -->
+                <div class="chat-tab-panel" id="chatBetsPanel">
+                    <div class="bets-ticker-header">
+                        <span>Game</span>
+                        <span>Player</span>
+                        <span>Mult.</span>
+                        <span>Payout</span>
+                    </div>
+                    <div class="bets-ticker-container" id="liveBetsTickerBox">
+                        <!-- Simulated Real-time Wagers Injected Here -->
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+        <!-- FLOATING BOTTOM NAVIGATION (Mobile Adaptive Viewport) -->
+        <nav class="mobile-bottom-nav glass-blur">
+            <a href="#home" class="mobile-nav-item active" data-view="home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#casino" class="mobile-nav-item" data-view="casino">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Casino</span>
+            </a>
+            <a href="#sportsbook" class="mobile-nav-item" data-view="sportsbook">
+                <i class="fa-solid fa-trophy"></i>
+                <span>Sports</span>
+            </a>
+            <a href="#vip" class="mobile-nav-item" data-view="vip">
+                <i class="fa-solid fa-crown"></i>
+                <span>VIP</span>
+            </a>
+            <a href="#wallet" class="mobile-nav-item" data-view="wallet">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Wallet</span>
+            </a>
+        </nav>
+
+        <!-- Dark/Light Mode Toggle -->
+        <div class="theme-toggle-wrapper" id="themeToggleWrapper">
+            <div class="theme-toggle-track" id="themeToggleTrack" title="Toggle Dark/Light Mode">
+                <div class="theme-toggle-knob" id="themeToggleKnob">
+                    <div class="icon" id="themeToggleIcon">🌙</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Persistent Mascot Companion -->
+        <div class="mascot-widget-wrapper" id="mascotWrapper">
+            <div class="mascot-speech-bubble" id="mascotSpeechBubble">
+                <div class="speech-content" id="mascotSpeechText">Welcome back. Your table is ready when you are.</div>
+                <div class="speech-arrow"></div>
+            </div>
+            
+            <div class="mascot-container glass-panel" id="mascotInteractiveIcon">
+                <!-- Inline Animated Vector SVG Fox Mascot (Disney-style Soft Glossy Styling) -->
+                <svg class="vibex-svg-character" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Soft gradients for Disney-style textures -->
+                        <linearGradient id="foxOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--fox-orange-1, #ff7f32)" />
+                            <stop offset="70%" stop-color="var(--fox-orange-2, #ff4f00)" />
+                            <stop offset="100%" stop-color="var(--fox-orange-3, #cc3300)" />
+                        </linearGradient>
+                        <linearGradient id="foxWhite" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#e0e5ed" />
+                        </linearGradient>
+                        <linearGradient id="cyberIris" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--cyber-iris-1, #8b958f)" />
+                            <stop offset="100%" stop-color="var(--cyber-iris-2, #0044ff)" />
+                        </linearGradient>
+                        <linearGradient id="neonEar" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="var(--neon-ear-1, #d9b36a)" />
+                            <stop offset="100%" stop-color="var(--neon-ear-2, #550088)" />
+                        </linearGradient>
+                        <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+                            <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.5" />
+                        </filter>
+                    </defs>
+
+                    <!-- Shadow Base -->
+                    <ellipse cx="100" cy="180" rx="45" ry="8" fill="rgba(0,0,0,0.3)"/>
+
+                    <!-- Fox Body/Shoulders (chibi style) -->
+                    <path d="M 65,150 Q 100,120 135,150 Q 145,180 135,185 L 65,185 Q 55,180 65,150 Z" fill="url(#foxOrange)" filter="url(#softShadow)"/>
+                    <path d="M 80,145 Q 100,135 120,145 Q 125,170 120,185 L 80,185 Q 75,170 80,145 Z" fill="url(#foxWhite)"/>
+                    <!-- Smart tech collar -->
+                    <rect x="75" y="142" width="50" height="6" rx="3" fill="#c99a4e" filter="url(#glowFilter)"/>
+                    <circle cx="100" cy="145" r="4" fill="#7fa06a" class="pulse-core"/>
+
+                    <!-- Left Ear -->
+                    <g class="mascot-left-ear">
+                        <path d="M 40,75 C 20,40 30,10 60,30 Z" fill="url(#foxOrange)" filter="url(#softShadow)"/>
+                        <path d="M 43,68 C 30,42 37,20 54,34 Z" fill="url(#neonEar)"/>
+                    </g>
+
+                    <!-- Right Ear -->
+                    <g class="mascot-right-ear">
+                        <path d="M 160,75 C 180,40 170,10 140,30 Z" fill="url(#foxOrange)" filter="url(#softShadow)"/>
+                        <path d="M 157,68 C 170,42 163,20 146,34 Z" fill="url(#neonEar)"/>
+                    </g>
+
+                    <!-- Main Fox Head Base -->
+                    <g class="mascot-head" filter="url(#softShadow)">
+                        <path d="M 45,95 Q 100,55 155,95 Q 165,120 150,135 Q 100,165 50,135 Q 35,120 45,95 Z" fill="url(#foxOrange)"/>
+                        <!-- White Fluffy Cheeks -->
+                        <path d="M 45,95 Q 30,120 50,135 Q 75,130 85,115 Z" fill="url(#foxWhite)"/>
+                        <path d="M 155,95 Q 170,120 150,135 Q 125,130 115,115 Z" fill="url(#foxWhite)"/>
+                        <!-- White Snout Underbelly -->
+                        <path d="M 80,110 Q 100,95 120,110 Q 125,125 100,135 Q 75,125 80,110 Z" fill="url(#foxWhite)"/>
+                        <!-- Nose -->
+                        <polygon points="94,116 106,116 100,122" fill="#12131a" rx="2"/>
+                    </g>
+
+                    <!-- Interactive EYES (Programmatic pupils bound to JS mouse movement variables) -->
+                    <g class="mascot-eyes">
+                        <!-- Left Eye Sclera -->
+                        <ellipse cx="78" cy="88" rx="16" ry="22" fill="#ffffff"/>
+                        <!-- Right Eye Sclera -->
+                        <ellipse cx="122" cy="88" rx="16" ry="22" fill="#ffffff"/>
+
+                        <!-- Left Iris (Bound in css to tracking variable) -->
+                        <g class="left-pupil-group" id="mascotLeftPupil">
+                            <ellipse cx="78" cy="88" rx="11" ry="14" fill="url(#cyberIris)"/>
+                            <ellipse cx="78" cy="88" rx="6" ry="8" fill="#000"/>
+                            <!-- Disney Specular highlight -->
+                            <circle cx="74" cy="83" r="3.5" fill="#fff"/>
+                            <circle cx="82" cy="92" r="1.5" fill="#fff"/>
+                        </g>
+
+                        <!-- Right Iris -->
+                        <g class="right-pupil-group" id="mascotRightPupil">
+                            <ellipse cx="122" cy="88" rx="11" ry="14" fill="url(#cyberIris)"/>
+                            <ellipse cx="122" cy="88" rx="6" ry="8" fill="#000"/>
+                            <!-- Specular highlight -->
+                            <circle cx="118" cy="83" r="3.5" fill="#fff"/>
+                            <circle cx="126" cy="92" r="1.5" fill="#fff"/>
+                        </g>
+
+                        <!-- Soft visor frame -->
+                        <path d="M 58,88 Q 100,98 142,88 M 58,88 Q 100,75 142,88" fill="none" stroke="#c99a4e" stroke-width="2.5" opacity="0.8" filter="url(#glowFilter)"/>
+                    </g>
+
+                    <!-- Cute Eyebrows -->
+                    <g class="mascot-eyebrows">
+                        <path d="M 64,62 Q 76,57 88,64" fill="none" stroke="#662200" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M 136,62 Q 124,57 112,64" fill="none" stroke="#662200" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+
+                    <!-- Cute Rosy cheeks -->
+                    <ellipse cx="56" cy="115" rx="8" ry="4" fill="#ff3366" opacity="0.3"/>
+                    <ellipse cx="144" cy="115" rx="8" ry="4" fill="#ff3366" opacity="0.3"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- TRANSACTION / WALLET DIALOG MODAL -->
+        <div id="globalWalletModal" class="overlay modal-overlay glass-blur">
+            <div class="modal-container glass-panel">
+                <button class="close-modal-btn" id="closeWalletModalBtn">&times;</button>
+                
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active" id="modalTabDepositBtn"><i class="fa-solid fa-arrow-down-to-bracket"></i> Deposit Crypto</button>
+                    <button class="modal-tab-btn" id="modalTabWithdrawBtn"><i class="fa-solid fa-arrow-up-from-bracket"></i> Fast Withdrawal</button>
+                </div>
+
+                <!-- Deposit content -->
+                <div class="modal-tab-panel active" id="modalDepositPanel">
+                    <div class="wallet-crypto-row-selector" id="depositCryptoSelector">
+                        <!-- Loaded dynamically -->
+                    </div>
+                    <div class="deposit-qr-wrapper">
+                        <div class="qr-code-placeholder" id="depositQrCode">
+                            <!-- Injected SVG QR -->
+                            <i class="fa-solid fa-qrcode fa-5x neon-color-text"></i>
+                        </div>
+                        <div class="deposit-address-container">
+                            <label class="input-label">YOUR PERSONAL INBOUND ADDRESS</label>
+                            <div class="address-copy-box">
+                                <span class="address-string" id="depositAddressStr">0x34C8d...b881</span>
+                                <button class="copy-btn" id="copyAddressBtn"><i class="fa-solid fa-copy"></i> Copy</button>
+                            </div>
+                            <span class="warning-caption"><i class="fa-solid fa-circle-exclamation text-yellow"></i> Only send ETH or ERC-20 tokens to this deposit address. Sending other coins results in permanent loss.</span>
+                        </div>
+                    </div>
+                    <div class="transaction-history-wrap">
+                        <h4>Deposit History</h4>
+                        <div class="tx-history-list" id="depositHistoryList">
+                            <!-- Simulated logs -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrawal content -->
+                <div class="modal-tab-panel" id="modalWithdrawPanel">
+                    <div class="withdraw-form">
+                        <div class="input-group">
+                            <label class="input-label">SELECT CRYPTO CURRENCY</label>
+                            <select class="cyber-select" id="withdrawCurrencySelect">
+                                <option value="ETH">Ethereum (ETH)</option>
+                                <option value="SOL">Solana (SOL)</option>
+                                <option value="BTC">Bitcoin (BTC)</option>
+                                <option value="USDT">USDT (ERC20)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">DESTINATION WALLET ADDRESS</label>
+                            <input type="text" class="cyber-input" id="withdrawAddressInput" placeholder="Enter recipient wallet address...">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-label-row">
+                                <label class="input-label">AMOUNT TO SEND</label>
+                                <span class="max-balance-helper" id="withdrawMaxHelper">Max: 12.450 ETH</span>
+                            </div>
+                            <div class="amount-input-box">
+                                <input type="number" step="any" class="cyber-input" id="withdrawAmountInput" placeholder="0.00">
+                                <button class="amount-max-btn" id="withdrawMaxBtn">MAX</button>
+                            </div>
+                        </div>
+                        <div class="withdraw-fee-summary">
+                            <div class="fee-row"><span>Platform Processing Fee:</span> <span class="electric-green-text">FREE</span></div>
+                            <div class="fee-row"><span>Estimated Network Gas:</span> <span id="withdrawGasFee">0.001 ETH</span></div>
+                            <div class="fee-row grand-total"><span>You Will Receive:</span> <span id="withdrawReceiveVal" class="cyan-text">0.000 ETH</span></div>
+                        </div>
+                        <button class="btn btn-primary btn-lg btn-full" id="withdrawSubmitBtn"><i class="fa-solid fa-money-bill-transfer"></i> Process Instant Withdrawal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROVABLY FAIR DIALOG DETAIL MODAL -->
+        <div id="provablyFairModal" class="overlay modal-overlay glass-blur">
+            <div class="modal-container glass-panel">
+                <button class="close-modal-btn" id="closeProvablyFairModalBtn">&times;</button>
+                <div class="modal-header-title">
+                    <i class="fa-solid fa-shield-halved neon-color-text"></i> Verify Game Outcome (Provably Fair)
+                </div>
+                <div class="provably-fair-verifier-panel">
+                    <div class="input-group">
+                        <label class="input-label">SERVER SEED (HASHED)</label>
+                        <input type="text" class="cyber-input font-mono" id="pfServerSeedHashed" readonly>
+                    </div>
+                    <div class="row-inputs">
+                        <div class="input-group">
+                            <label class="input-label">CLIENT SEED (USER ADJUSTABLE)</label>
+                            <input type="text" class="cyber-input font-mono" id="pfClientSeed" value="VoidBetClientSeed123">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">NONCE (BET INDEX)</label>
+                            <input type="number" class="cyber-input font-mono" id="pfNonce" value="1">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">SERVER SEED (REVEALED IN CLEAR-TEXT)</label>
+                        <input type="text" class="cyber-input font-mono" id="pfServerSeedClear" readonly placeholder="Will reveal when game seed rotates...">
+                    </div>
+                    <button class="btn btn-secondary btn-full" id="pfGenerateSeedBtn"><i class="fa-solid fa-arrows-rotate"></i> Rotate Active Seeds</button>
+                    
+                    <div class="hash-calculation-box">
+                        <div class="calc-step-title">SHA-256 COMBINATORIAL SCHEME:</div>
+                        <div class="calc-string font-mono" id="pfCombinatorString">server_seed:client_seed:nonce</div>
+                        <div class="arrow-down-indicator"><i class="fa-solid fa-arrow-down"></i></div>
+                        <div class="calc-step-title">RESULTING SHA-256 HASH SPECIFICATION:</div>
+                        <div class="calc-hash-result font-mono" id="pfHashResult">4f7a26...e77b</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REWARD CELEBRATION LOOTBOX POPUP -->
+        <div id="lootboxCelebrationModal" class="overlay modal-overlay glass-blur">
+            <div class="lootbox-container">
+                <div class="lootbox-glow-ring"></div>
+                <div class="lootbox-elements">
+                    <div class="lootbox-title" id="lootboxTitleText">DAILY BONUS DROPPED!</div>
+                    <div class="lootbox-model" id="lootboxVisualNode">
+                        <!-- Reward box SVG -->
+                        <svg class="hologram-box-svg" viewBox="0 0 100 100">
+                            <polygon points="50,15 85,32.5 85,67.5 50,85 15,67.5 15,32.5" fill="none" stroke="#c99a4e" stroke-width="2.5" class="bounce-float"/>
+                            <line x1="50" y1="15" x2="50" y2="85" stroke="#8b958f" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="15" y1="32.5" x2="50" y2="50" stroke="#7fa06a" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="85" y1="32.5" x2="50" y2="50" stroke="#7fa06a" stroke-width="1.5" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <button class="btn btn-success btn-lg" id="lootboxOpenBtn"><i class="fa-solid fa-gift"></i> UNLOCK LOOT BOX</button>
+                    
+                    <div class="loot-result-panel" id="lootResultCard" style="display: none;">
+                        <div class="loot-icon"><i class="fa-solid fa-crown fa-3x neon-purple-text"></i></div>
+                        <div class="loot-value" id="lootResultValue">+0.050 ETH</div>
+                        <div class="loot-desc" id="lootResultDesc">VIP Platinum Level Reward Added!</div>
+                        <button class="btn btn-primary" id="lootboxClaimBtn">CLAIM & SYNC</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATION TOAST WRAPPER -->
+        <div id="toastNotification" class="toast-container"></div>
+
+        <!-- Full-screen rewards canvas -->
+        <canvas id="jackpotRainCanvas"></canvas>
+
+    </div>
+
+    <!-- Background Audio Loop -->
+    <audio id="ambientSynthAudio" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-cyberpunk-synthwave-2321.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- App Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
