@@ -231,10 +231,10 @@ VoidBet's premium design is built upon carefully calibrated custom CSS propertie
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the No License yet. See `LICENSE` for more information.
 
 ---
 
 <p align="center">
-  Developed by <a href="https://github.com/vikasbudiya">Vikas Budiya</a> • Designed with 🌌 VoidBet Gaming Aesthetics
+  Developed by <a href="https://github.com/vikasbudiya">Vikas Budiya</a> • Designed with 🌌 my self
 </p>
