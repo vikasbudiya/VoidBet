@@ -38,6 +38,7 @@ const ARCADE_SYNTH = {
     },
 
     playIgnition() {
+        if (this.isMuted()) return;
         this.init();
         if (!this.ctx) return;
         
@@ -109,6 +110,7 @@ const ARCADE_SYNTH = {
     },
 
     startTension(multiplier) {
+        if (this.isMuted()) return;
         this.init();
         if (!this.ctx) return;
         
@@ -161,6 +163,7 @@ const ARCADE_SYNTH = {
     },
 
     playBoom() {
+        if (this.isMuted()) return;
         this.stopTensionAndRumble();
         this.init();
         if (!this.ctx) return;
@@ -221,6 +224,7 @@ const ARCADE_SYNTH = {
     },
 
     playWinCheer() {
+        if (this.isMuted()) return;
         this.stopTensionAndRumble();
         this.init();
         if (!this.ctx) return;
@@ -252,6 +256,7 @@ const ARCADE_SYNTH = {
     },
 
     playLossGlitch() {
+        if (this.isMuted()) return;
         this.stopTensionAndRumble();
         this.init();
         if (!this.ctx) return;
@@ -284,6 +289,7 @@ const ARCADE_SYNTH = {
     },
 
     playOhYeah() {
+        if (this.isMuted()) return;
         this.stopTensionAndRumble();
         this.init();
         if (!this.ctx) return;
@@ -323,6 +329,7 @@ const ARCADE_SYNTH = {
     },
 
     playPlinkoPegClick(pitch = 500) {
+        if (this.isMuted()) return;
         this.init();
         if (!this.ctx) return;
         try {
@@ -3010,20 +3017,12 @@ const VOID_COMPONENTS = {
         `;
         
         const toggler = container.querySelector("#prefSoundTogglerBtn");
+        toggler.textContent = window._VOIDBET_MUTED ? "Enable Audio" : "Disable Audio";
         toggler.addEventListener("click", () => {
-            const bgAudio = document.getElementById("ambientSynthAudio");
             const soundToggleBtn = document.getElementById("soundToggleBtn");
-            
-            if (bgAudio.paused) {
-                bgAudio.play().catch(e => console.log("Audio play blocked by browser. Interaction required."));
-                toggler.textContent = "Disable Audio";
-                soundToggleBtn.querySelector(".sound-on").style.display = "inline-block";
-                soundToggleBtn.querySelector(".sound-off").style.display = "none";
-            } else {
-                bgAudio.pause();
-                toggler.textContent = "Enable Audio";
-                soundToggleBtn.querySelector(".sound-on").style.display = "none";
-                soundToggleBtn.querySelector(".sound-off").style.display = "inline-block";
+            if (soundToggleBtn) {
+                soundToggleBtn.click();
+                toggler.textContent = window._VOIDBET_MUTED ? "Enable Audio" : "Disable Audio";
             }
         });
     },

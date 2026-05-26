@@ -608,6 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // This ALWAYS plays after user's first gesture, regardless of sound toggle
     window.playWaterCoinClick = () => {
         if (!audioInitialized) return; // Only gate on first interaction
+        if (window._VOIDBET_MUTED) return; // Mute when global sound is disabled
 
         try {
             const ctx = getClickCtx();
