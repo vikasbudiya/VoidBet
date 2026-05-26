@@ -1523,7 +1523,8 @@ a {
 }
 
 .modal-container {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     max-height: 90%;
     overflow-y: auto;
     position: relative;
@@ -1577,7 +1578,8 @@ a {
 
 /* Lootbox Celebration specifies */
 .lootbox-container {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
     position: relative;
     padding: 40px;
@@ -1679,17 +1681,371 @@ a {
 .mobile-nav-item i { font-size: 16px; }
 .mobile-nav-item.active { color: var(--cyber-cyan); }
 
+/* ==========================================================================
+   ADVANCED RESPONSIVE SYSTEM (MOBILE, TABLET, LAPTOP)
+   ========================================================================== */
+
+/* 1. Global Wallet Modal & Inner Elements Styles (Responsive & Premium) */
+.wallet-crypto-row-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.wallet-crypto-row-selector-card {
+    flex: 1;
+    min-width: 65px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 11px;
+    font-weight: 600;
+}
+.wallet-crypto-row-selector-card i {
+    font-size: 14px;
+}
+.wallet-crypto-row-selector-card:hover {
+    border-color: var(--cyber-cyan);
+    background: rgba(0, 240, 255, 0.04);
+}
+.wallet-crypto-row-selector-card.active {
+    border-color: var(--neon-purple);
+    background: rgba(189, 0, 255, 0.08);
+    box-shadow: 0 0 10px var(--neon-purple-glow);
+}
+
+.deposit-qr-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 24px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+.qr-code-placeholder {
+    width: 110px;
+    height: 110px;
+    background: #fff;
+    padding: 8px;
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.qr-code-placeholder i {
+    color: #12131a !important;
+}
+.deposit-address-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0; /* allows child text ellipsis overflow to trigger */
+}
+.address-copy-box {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--border-radius-sm);
+    padding: 2px 2px 2px 10px;
+    gap: 10px;
+    min-width: 0;
+}
+.address-string {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+.copy-btn {
+    background: var(--neon-purple);
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+}
+.copy-btn:hover {
+    background: #a200db;
+    box-shadow: 0 0 10px var(--neon-purple-glow);
+}
+.warning-caption {
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    display: flex;
+    gap: 6px;
+}
+
+/* 2. Responsive Breakpoint Media Queries */
 @media (max-width: 992px) {
     --chat-width: 0px;
-    .chat-sidebar { display: none; }
-    .sidebar { display: none; }
+    
+    /* Sliding absolute side drawers overlays */
+    .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: var(--sidebar-width) !important;
+        background: rgba(7, 8, 12, 0.98);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        z-index: 1000;
+        transform: translateX(0);
+        transition: transform var(--transition-smooth);
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8);
+        border-right: 1px solid var(--border-color);
+    }
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+        width: var(--sidebar-width) !important;
+    }
+    
+    .chat-sidebar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 320px !important;
+        background: rgba(7, 8, 12, 0.98);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        z-index: 1000;
+        transform: translateX(0);
+        transition: transform var(--transition-smooth);
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+        border-left: 1px solid var(--border-color);
+    }
+    .chat-sidebar.collapsed {
+        transform: translateX(100%);
+        width: 320px !important;
+    }
+    
+    /* Layout heights and paddings scaling */
     .mobile-bottom-nav { display: grid; }
     .app-body { height: calc(100vh - var(--header-height) - 60px); }
     .main-viewport { padding-bottom: 20px; }
-    .viewport-transition { padding: 15px; }
+    .viewport-transition { padding: 16px; }
     .hidden-mobile { display: none; }
-    .sports-hub-layout { grid-template-columns: 1fr; }
     .mascot-widget-wrapper { bottom: 80px; }
+    
+    /* Stacking specific page layouts */
+    .sports-hub-layout { grid-template-columns: 1fr; }
+    
+    /* Game layouts vertical adaptiveness */
+    .game-play-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 16px;
+    }
+    .game-control-panel {
+        height: auto;
+        order: 2; /* control panels stacked below canvas */
+    }
+    .game-viewport-frame {
+        height: auto;
+        aspect-ratio: 1.6;
+        max-height: 420px;
+        order: 1; /* canvas stacked on top for mobile action */
+        border-radius: var(--border-radius-md);
+    }
+    .mines-split-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 16px;
+    }
+    .mole-miner-panel {
+        height: auto;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Home Hero Content scaling down */
+    .home-hero-container {
+        padding: 24px 16px;
+        margin-bottom: 24px;
+    }
+    .home-hero-layout {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    .hero-title {
+        font-size: 32px;
+        margin-bottom: 12px;
+    }
+    .hero-desc {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+    .hero-cta-row {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    /* Home jackpot banner stack */
+    .home-jackpot-banner {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+    .jackpot-counter-big {
+        font-size: 26px;
+    }
+    
+    /* General Modals widths prevent overflow */
+    .modal-container {
+        width: 100%;
+        max-width: 95%;
+        padding: 20px;
+    }
+    .close-modal-btn {
+        top: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Header (Navbar) pocket mobile optimizations */
+    .main-header {
+        padding: 0 10px;
+        gap: 6px;
+    }
+    .logo-link {
+        gap: 6px;
+    }
+    .logo-brand {
+        font-size: 16px;
+    }
+    .logo-icon-wrapper {
+        width: 32px;
+        height: 32px;
+    }
+    .balance-display {
+        padding: 6px 10px;
+        gap: 6px;
+    }
+    .balance-numbers {
+        font-size: 12px;
+    }
+    #headerLevelBadge {
+        display: none; /* remove profile badge level label to save space */
+    }
+    .header-right {
+        gap: 8px;
+    }
+    .deposit-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    
+    /* Modal Inner Row breakdown */
+    .deposit-qr-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 12px;
+    }
+    .deposit-address-container {
+        width: 100%;
+    }
+    .address-copy-box {
+        width: 100%;
+    }
+    
+    /* PvP Battle Coinflip arena scales down */
+    .pvp-battle-arena {
+        gap: 8px;
+        padding: 10px 5px;
+    }
+    .pvp-challenger-panel {
+        width: 95px;
+        padding: 10px 6px;
+    }
+    .pvp-mascot-img {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 6px;
+    }
+    .pvp-player-tag {
+        font-size: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+    .pvp-side-badge {
+        font-size: 8px;
+        padding: 2px 6px;
+    }
+    .coinflip-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+    .coin-face {
+        font-size: 28px;
+        border-width: 3px;
+    }
+    
+    /* Sports match lists stacking */
+    .match-odds-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 16px;
+    }
+    .match-odds-selector {
+        justify-content: space-between;
+        width: 100%;
+    }
+    .odds-coefficient-btn {
+        flex: 1;
+        width: auto;
+    }
+    
+    /* Plinko game viewport ratio adjustment */
+    .game-viewport-frame {
+        aspect-ratio: 1.4;
+    }
+    
+    /* Mines grid matrix scale down */
+    .mines-matrix-container {
+        max-width: 320px;
+        gap: 6px;
+    }
+    
+    /* Lootbox Overlay titles styling */
+    .lootbox-outcome-overlay {
+        padding: 16px 20px;
+        width: 90%;
+    }
+    .lootbox-reward-title {
+        font-size: 38px;
+    }
 }
 
 /* ==========================================================================

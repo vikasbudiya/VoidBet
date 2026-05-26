@@ -97,6 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Collapsible side navigation handler
     const sidebar = document.getElementById("mainSidebar");
+    const chatSidebar = document.getElementById("chatSidebar");
+    
+    if (window.innerWidth <= 992) {
+        sidebar.classList.add("collapsed");
+        chatSidebar.classList.add("collapsed");
+    }
+
     document.getElementById("sidebarCollapseBtn").addEventListener("click", () => {
         sidebar.classList.toggle("collapsed");
     });
